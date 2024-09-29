@@ -11,9 +11,12 @@
 
 static char* s_line = NULL;
 static size_t s_line_buffer_size = LINE_BUFFER_SIZE;
-static bool s_peek_current_line = false;
 static size_t s_last_line_length = 0;
+static size_t s_last_line_indent = 0;
 static size_t s_line_count = 0;
+
+static bool s_peek_current_line = false;
+static bool s_ignore_indent_next_line = false;
 
 ssize_t next_line(FILE* file)
 {
@@ -73,14 +76,21 @@ void unbracify_block(FILE* file, size_t last_indent)
             }
         }
 
-        if (indent > current_indent) {
-            fprintf(stderr, "Error line %lu: Unexpected indent\n", s_line_count);
-            exit(1);
-        }
+        if (s_ignore_indent_next_line) {
+            s_ignore_indent_next_line = false;
+            indent = s_last_line_indent;
+        } else {
+            s_last_line_indent = indent;
 
-        if (indent < current_indent) {
-            s_peek_current_line = true;
-            break;
+            if (indent > current_indent) {
+                fprintf(stderr, "Error line %lu: Unexpected indent\n", s_line_count);
+                exit(1);
+            }
+
+            if (indent < current_indent) {
+                s_peek_current_line = true;
+                break;
+            }
         }
 
         if (s_line[length - 1] == ':') {
@@ -94,6 +104,9 @@ void unbracify_block(FILE* file, size_t last_indent)
             printf("%.*s}\n", (int)indent, original_line);
 
             free(original_line);
+        } else if (s_line[length - 1] == '\\') {
+            s_ignore_indent_next_line = true;
+            printf("%.*s\n", (int)length - 1, s_line);
         } else {
             printf("%.*s\n", (int)length, s_line);
         }
