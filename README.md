@@ -23,7 +23,9 @@ int main():
 use std::env;
 
 fn main():
-    if env::args().next().unwrap() == "I love braces":
+    let mut args = env::args();
+    args.next().unwrap();
+    if args.next().unwrap_or_default() == "I love braces":
         println!("Boo!");
     else:
         println!("Yay!");
