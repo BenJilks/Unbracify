@@ -1,7 +1,7 @@
 # Unbracify
 Do you love python's whitespace block formatting?
 Do you wish every other language also used it?
-No? Then this project isn't for you.
+No? I made it anyway.
 
 Unbracify is a source-to-source compiler, that allows you to bring python style blocks anywhere.
 
