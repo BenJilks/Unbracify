@@ -14,7 +14,7 @@ An yes, unbracify is implemented in itself!
 #include <stdio.h>
 
 int main():
-    printf("No braces!!\n");
+    printf("Look ma! No braces!!\n");
     return 1;
 ```
 
