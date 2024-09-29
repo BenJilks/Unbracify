@@ -10,6 +10,7 @@
 #define LINE_BUFFER_SIZE 1024
 
 static char* s_line = NULL;
+static size_t s_line_buffer_size = LINE_BUFFER_SIZE;
 static bool s_peek_current_line = false;
 static size_t s_last_line_length = 0;
 static size_t s_line_count = 0;
@@ -19,10 +20,7 @@ ssize_t next_line(FILE* file):
         s_peek_current_line = false;
         return s_last_line_length;
 
-    size_t buffer_size = LINE_BUFFER_SIZE;
-    size_t length = getline(&s_line, &buffer_size, file);
-    assert(buffer_size == LINE_BUFFER_SIZE);
-
+    size_t length = getline(&s_line, &s_line_buffer_size, file);
     s_last_line_length = length;
     s_line_count += 1;
     return length;
@@ -83,6 +81,7 @@ void unbracify_block(FILE* file, size_t last_indent):
 
 void unbracify_file(FILE* file):
     s_line = malloc(LINE_BUFFER_SIZE);
+    s_line_buffer_size = LINE_BUFFER_SIZE;
     unbracify_block(file, 0);
     free(s_line);
 
