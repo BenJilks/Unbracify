@@ -12,7 +12,7 @@
 static char* s_line = NULL;
 static bool s_peek_current_line = false;
 static size_t s_last_line_length = 0;
-static size_t s_line_count = 1;
+static size_t s_line_count = 0;
 
 ssize_t next_line(FILE* file)
 {
