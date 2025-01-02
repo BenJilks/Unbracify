@@ -5,7 +5,7 @@ No? I made it anyway.
 
 Unbracify is a source-to-source compiler, that allows you to bring python style blocks anywhere.
 
-An yes, unbracify is implemented in itself!
+And yes, unbracify is implemented in itself!
 
 ## Examples
 
