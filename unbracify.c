@@ -40,6 +40,15 @@ size_t count_indent(char const* line, size_t length):
             return i;
     return 0;
 
+bool is_else_block(char const* line, size_t length):
+    size_t offset = 0;
+    while (offset < length && isspace(line[offset])):
+        offset += 1;
+    if (length - offset < 4):
+        return false;
+    return strncmp(line + offset, "else", 4) == 0 \
+        || strncmp(line + offset, "elif", 4) == 0;
+
 void unbracify_block(FILE* file, size_t last_indent):
     size_t length = 0;
     size_t current_indent = 0;
@@ -80,11 +89,13 @@ void unbracify_block(FILE* file, size_t last_indent):
             char* original_line = malloc(length);
             memcpy(original_line, s_line, length);
 
-            printf("%.*s\n", (int)length - 1, original_line);
-
-            printf("%.*s{\n", (int)indent, original_line);
+            printf("%.*s {\n", (int)length - 1, original_line);
             unbracify_block(file, current_indent);
-            printf("%.*s}\n", (int)indent, original_line);
+
+            if (is_else_block(s_line, s_last_line_length)):
+                printf("%.*s}", (int)indent, original_line);
+            else:
+                printf("%.*s}\n", (int)indent, original_line);
 
             free(original_line);
         else if (s_line[length - 1] == '\\'):

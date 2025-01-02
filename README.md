@@ -31,6 +31,25 @@ fn main():
         println!("Yay!");
 ```
 
+### Go
+```go
+package main
+
+import "fmt"
+import "sync"
+
+func routine(i int, wg *sync.WaitGroup):
+    fmt.Printf("Braceless concurrency %d\n", i)
+    wg.Done()
+
+func main():
+    var wg sync.WaitGroup
+    for i := 0; i < 10; i++:
+        wg.Add(1)
+        go routine(i, &wg)
+    wg.Wait()
+```
+
 ### Bython
 ```python
 def main():
